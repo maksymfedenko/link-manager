@@ -1,0 +1,25 @@
+{
+  "name": "link-manager",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "next": "^9.1.1",
+    "react": "^16.10.2",
+    "react-dom": "^16.10.2"
+  },
+  "devDependencies": {
+    "@types/node": "^12.11.1",
+    "@types/react": "^16.9.9",
+    "typescript": "^3.6.4"
+  }
+}
