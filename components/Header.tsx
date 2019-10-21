@@ -1,4 +1,4 @@
-import AppBar from "@material-ui/core/AppBar";
+import AppBar from '@material-ui/core/AppBar';
 import {
   Toolbar,
   Typography,
@@ -7,28 +7,28 @@ import {
   MenuItem,
   makeStyles,
   createStyles,
-  Theme
-} from "@material-ui/core";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import { useState } from "react";
-import Link from "next/link";
+  Theme,
+} from '@material-ui/core';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import { useState } from 'react';
+import Link from 'next/link';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     rightContent: {
-      marginLeft: "auto"
+      marginLeft: 'auto',
     },
     link: {
       margin: theme.spacing(1),
     },
-  })
+  }),
 );
 
 const Header = () => {
   const classes = useStyles();
 
   const [userMenuAnchor, setUserMenuAnchor] = useState<null | HTMLElement>(
-    null
+    null,
   );
 
   const openUserMenu = (e: React.MouseEvent<HTMLButtonElement>) => {
