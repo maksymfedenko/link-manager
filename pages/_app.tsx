@@ -1,17 +1,17 @@
-import React from "react";
-import App from "next/app";
-import Head from "next/head";
-import { ThemeProvider } from "@material-ui/styles";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import theme from "../src/theme";
-import MainLayout from "../components/layouts/MainLayout";
+import React from 'react';
+import App from 'next/app';
+import Head from 'next/head';
+import { ThemeProvider } from '@material-ui/styles';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import theme from '../src/theme';
+import MainLayout from '../components/layouts/MainLayout';
 
 export default class MyApp extends App {
   componentDidMount() {
     // Remove the server-side injected CSS.
-    const jssStyles = document.querySelector("#jss-server-side");
-    if (jssStyles) {
-      jssStyles.parentNode!.removeChild(jssStyles);
+    const jssStyles = document.querySelector('#jss-server-side');
+    if (jssStyles && jssStyles.parentNode) {
+      jssStyles.parentNode.removeChild(jssStyles);
     }
   }
 
@@ -27,6 +27,7 @@ export default class MyApp extends App {
           {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
           <CssBaseline />
           <MainLayout>
+            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
             <Component {...pageProps} />
           </MainLayout>
         </ThemeProvider>
