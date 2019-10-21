@@ -41,5 +41,9 @@ module.exports = {
     'react/react-in-jsx-scope': 'off',
     'react/prop-types': 'off',
     'jsx-a11y/anchor-is-valid': 'off',
+    'import/no-extraneous-dependencies': [
+      'error',
+      { devDependencies: ['**/*.test.ts', '**/*.test.tsx'] },
+    ],
   },
 };
