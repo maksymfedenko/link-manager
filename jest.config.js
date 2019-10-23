@@ -5,7 +5,7 @@ module.exports = {
   testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$',
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
   snapshotSerializers: ['enzyme-to-json/serializer'],
-  setupFilesAfterEnv: ['<rootDir>/setupEnzyme.ts'],
+  setupFilesAfterEnv: ['<rootDir>/src/setupEnzyme.ts'],
   modulePaths: ['<rootDir>'],
   globals: {
     // we must specify a custom tsconfig for tests because we need the typescript transform

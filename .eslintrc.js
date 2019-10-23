@@ -45,5 +45,8 @@ module.exports = {
       'error',
       { devDependencies: ['**/*.test.ts', '**/*.test.tsx'] },
     ],
+    'import/prefer-default-export': 'off',
+    'consistent-return': 'off',
+    '@typescript-eslint/no-non-null-assertion': 'off',
   },
 };

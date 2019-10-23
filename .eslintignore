@@ -1,4 +1,4 @@
 next-env.d.ts
 next.config.js
 prettier.config.js
-setupEnzyme.ts
+src/setupEnzyme.ts
