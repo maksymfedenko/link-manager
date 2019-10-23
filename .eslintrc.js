@@ -45,5 +45,6 @@ module.exports = {
       'error',
       { devDependencies: ['**/*.test.ts', '**/*.test.tsx'] },
     ],
+    'import/prefer-default-export': 'off',
   },
 };
