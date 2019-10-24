@@ -47,6 +47,7 @@ module.exports = {
     ],
     'import/prefer-default-export': 'off',
     'consistent-return': 'off',
+    '@typescript-eslint/no-use-before-define': 'off',
     '@typescript-eslint/no-non-null-assertion': 'off',
   },
 };
