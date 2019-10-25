@@ -1,8 +1,138 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import { withApollo } from 'src/hooks/withApollo';
+import TagTree from 'components/TagTree/TagTree';
+import {
+  Container,
+  createStyles,
+  Theme,
+  Box,
+  useTheme,
+  useMediaQuery,
+  Grid,
+  Typography,
+  Button,
+  IconButton,
+  Icon,
+  Drawer,
+} from '@material-ui/core';
+import { makeStyles } from '@material-ui/styles';
+import BookmarkInfiniteScroll from 'components/Bookmark/BookmarkInfiniteScroll';
+import { Tag } from 'src/models/Tag.model';
+import { get } from 'lodash';
+import BookmarkOrderSelect, {
+  orderOptions,
+} from 'components/Bookmark/BookmarkOrderSelect';
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      display: 'flex',
+      padding: '16px 24px',
+      flexGrow: 1,
+    },
+    tagTreeWrapper: {
+      flex: '0 0 300px',
+      paddingRight: theme.spacing(3),
+      marginRight: theme.spacing(3),
+      borderRight: `thin solid ${theme.palette.grey[400]}`,
+    },
+    tagTreeDrawer: {
+      width: '300px',
+      padding: `${theme.spacing(4)}px ${theme.spacing(2)}px`,
+      overflowY: 'auto',
+    },
+    content: {
+      flexGrow: 1,
+    },
+    settingsWrapper: {
+      [theme.breakpoints.up('sm')]: {
+        display: 'flex',
+        justifyContent: 'flex-end',
+      },
+    },
+    addBtn: {
+      marginLeft: theme.spacing(3),
+    },
+    settingsBox: {
+      display: 'flex',
+      alignItems: 'center',
+    },
+  }),
+);
 
 export const HomePage = () => {
-  return <h1>Index page</h1>;
+  const theme = useTheme();
+  const classes = useStyles();
+  const matches = useMediaQuery(theme.breakpoints.up('lg'));
+  const [selectedTag, setSelectedTag] = useState<Tag>();
+  const [tagDrawerOpened, setTagDrawerOpened] = useState<boolean>(false);
+  const [orderBy, setOrder] = useState<string>(orderOptions[0].value);
+
+  const openTagDrawer = useCallback(() => {
+    setTagDrawerOpened(true);
+  }, [setTagDrawerOpened]);
+
+  const closeTagDrawer = useCallback(() => {
+    setTagDrawerOpened(false);
+  }, [setTagDrawerOpened]);
+
+  return (
+    <Container maxWidth={false} className={classes.root}>
+      {matches && (
+        <div className={classes.tagTreeWrapper}>
+          <TagTree onTagSelect={setSelectedTag} selectedTag={selectedTag} />
+        </div>
+      )}
+
+      <Box>
+        <Box mb={3} className={classes.content}>
+          <Grid container>
+            <Grid item xs={12} sm={6}>
+              <Typography variant="h6">Bookmarks</Typography>
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              classes={{ item: classes.settingsWrapper }}
+            >
+              <Box className={classes.settingsBox}>
+                {!matches && (
+                  <IconButton
+                    aria-label="filter of bookmarks by tag"
+                    aria-haspopup="true"
+                    onClick={openTagDrawer}
+                    color="primary"
+                  >
+                    <Icon className="fas fa-filter" />
+                  </IconButton>
+                )}
+                <BookmarkOrderSelect
+                  currentOrder={orderBy}
+                  changeOrder={setOrder}
+                />
+                <Button
+                  variant="contained"
+                  color="primary"
+                  className={classes.addBtn}
+                >
+                  Add New
+                </Button>
+              </Box>
+            </Grid>
+          </Grid>
+        </Box>
+        <BookmarkInfiniteScroll order={orderBy} tag={get(selectedTag, 'id')} />
+      </Box>
+      <Drawer
+        open={tagDrawerOpened}
+        onClose={closeTagDrawer}
+        classes={{ paper: classes.tagTreeDrawer }}
+      >
+        <TagTree onTagSelect={setSelectedTag} selectedTag={selectedTag} />
+      </Drawer>
+    </Container>
+  );
 };
 
 export default withApollo(HomePage);
