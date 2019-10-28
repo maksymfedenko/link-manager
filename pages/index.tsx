@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { withApollo } from 'src/hooks/withApollo';
+import { withApollo } from 'src/hocs/withApollo';
 import TagTree from 'components/TagTree/TagTree';
 import {
   Container,
@@ -17,11 +17,11 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import BookmarkInfiniteScroll from 'components/Bookmark/BookmarkInfiniteScroll';
-import { Tag } from 'src/models/Tag.model';
 import { get } from 'lodash';
 import BookmarkOrderSelect, {
   orderOptions,
 } from 'components/Bookmark/BookmarkOrderSelect';
+import { TagOption } from 'src/models/TagOption.model';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -64,7 +64,7 @@ export const HomePage = () => {
   const theme = useTheme();
   const classes = useStyles();
   const matches = useMediaQuery(theme.breakpoints.up('lg'));
-  const [selectedTag, setSelectedTag] = useState<Tag>();
+  const [selectedTag, setSelectedTag] = useState<TagOption>();
   const [tagDrawerOpened, setTagDrawerOpened] = useState<boolean>(false);
   const [orderBy, setOrder] = useState<string>(orderOptions[0].value);
 

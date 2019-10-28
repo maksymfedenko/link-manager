@@ -25,10 +25,7 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-const Progress: React.FC<{ open: boolean; className?: string }> = ({
-  open,
-  className,
-}) => {
+const Progress: React.FC<Props> = ({ open, className, size = 60 }) => {
   const classes = useStyles();
 
   return (
@@ -37,9 +34,15 @@ const Progress: React.FC<{ open: boolean; className?: string }> = ({
         [classes.progressWrapperOpen]: open,
       })}
     >
-      <CircularProgress size={60} color="secondary" />
+      <CircularProgress size={size} color="secondary" />
     </div>
   );
+};
+
+type Props = {
+  open: boolean;
+  className?: string;
+  size?: number;
 };
 
 export default Progress;
