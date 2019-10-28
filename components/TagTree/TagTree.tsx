@@ -2,57 +2,30 @@ import TreeView from '@material-ui/lab/TreeView';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import { isEmpty, get } from 'lodash';
-import { Typography, Box } from '@material-ui/core';
+import { Typography, Box, makeStyles, createStyles } from '@material-ui/core';
 import TagTreeItem from 'components/TagTree/TagTreeItem';
-import { Tag } from 'src/models/Tag.model';
+import useFetchTags from 'src/hooks/useTagList';
+import Progress from 'components/Progress/Progress';
+import Toastr from 'components/Toastr';
+import { useMemo } from 'react';
+import { TagOption } from 'src/models/TagOption.model';
 
 const EndIcon = () => <div style={{ width: 24 }} />;
 
-const data: Tag[] = [
-  {
-    id: '1',
-    title: 'Applications',
-    tags: [
-      {
-        title: 'Calendar',
-        id: '2',
-      },
-      {
-        title: 'Chrome',
-        id: '3',
-      },
-      {
-        title: 'Webstorm',
-        id: '4',
-      },
-      {
-        title: 'Material-UI',
-        id: '6',
-        tags: [
-          {
-            title: 'index.js',
-            id: '7',
-          },
-          {
-            title: 'tree-view.js',
-            id: '8',
-          },
-        ],
-      },
-    ],
-  },
-  {
-    title: 'Documents',
-    id: '5',
-  },
-];
+const useStyles = makeStyles(() =>
+  createStyles({
+    root: {
+      position: 'relative',
+    },
+  }),
+);
 
-const renderTags = (tags: Tag[] | undefined, props: Props) => {
+const renderTags = (tags: TagOption[] | undefined, props: Props) => {
   if (isEmpty(tags)) return undefined;
 
   return tags!.map((tag) => (
     <TagTreeItem
-      key={tag.id}
+      key={tag.id + tag.title}
       tag={tag}
       selected={tag.id === get(props.selectedTag, 'id')}
       onTagSelect={props.onTagSelect}
@@ -63,25 +36,48 @@ const renderTags = (tags: Tag[] | undefined, props: Props) => {
 };
 
 const TagTree: React.FC<Props> = (props) => {
+  const classes = useStyles();
+  const [{ loading, error, data: tagListResponse }] = useFetchTags();
+  const tags = useMemo(() => {
+    const defaultTagOptions: TagOption[] = [
+      {
+        id: undefined,
+        title: 'All',
+      },
+      {
+        id: null,
+        title: 'Without tags',
+      },
+    ];
+
+    return isEmpty(tagListResponse)
+      ? defaultTagOptions
+      : defaultTagOptions.concat(tagListResponse!.tags);
+  }, [tagListResponse]);
+
   return (
-    <>
+    <Box>
       <Box mb={1}>
         <Typography variant="h6">Tags</Typography>
       </Box>
-      <TreeView
-        defaultCollapseIcon={<ArrowDropDownIcon />}
-        defaultExpandIcon={<ArrowRightIcon />}
-        defaultEndIcon={<EndIcon />}
-      >
-        {renderTags(data, props)}
-      </TreeView>
-    </>
+      <Box className={classes.root}>
+        <Progress open={loading} size={40} />
+        <Toastr open={Boolean(error)} error={error} />
+        <TreeView
+          defaultCollapseIcon={<ArrowDropDownIcon />}
+          defaultExpandIcon={<ArrowRightIcon />}
+          defaultEndIcon={<EndIcon />}
+        >
+          {renderTags(tags, props)}
+        </TreeView>
+      </Box>
+    </Box>
   );
 };
 
 type Props = {
-  selectedTag?: Tag;
-  onTagSelect: (selectedTag: Tag) => void;
+  selectedTag?: TagOption;
+  onTagSelect: (selectedTag: TagOption) => void;
 };
 
 export default TagTree;

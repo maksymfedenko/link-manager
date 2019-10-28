@@ -2,8 +2,8 @@ import TreeItem from '@material-ui/lab/TreeItem';
 import { makeStyles } from '@material-ui/styles';
 import { Theme, createStyles } from '@material-ui/core';
 import { useCallback } from 'react';
-import { Tag } from 'src/models/Tag.model';
 import cn from 'classnames';
+import { TagOption } from 'src/models/TagOption.model';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -57,7 +57,7 @@ const TagTreeItem: React.FC<Props> = ({
 
   return (
     <TreeItem
-      nodeId={tag.id}
+      nodeId={tag.id + tag.title}
       label={tag.title}
       classes={{
         root: classes.root,
@@ -74,9 +74,9 @@ const TagTreeItem: React.FC<Props> = ({
 };
 
 interface Props {
-  tag: Tag;
+  tag: TagOption;
   selected: boolean;
-  onTagSelect: (tag: Tag) => void;
+  onTagSelect: (tag: TagOption) => void;
 }
 
 export default TagTreeItem;

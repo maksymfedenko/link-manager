@@ -68,7 +68,7 @@ const BookmarkInfiniteScroll: React.FC<Props> = () => {
 };
 
 type Props = {
-  tag?: string;
+  tag?: string | null | undefined;
   order?: string;
 };
 
