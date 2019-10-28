@@ -1,8 +1,8 @@
-import Header from 'src/components/Header';
+import Header from 'components/Header';
 import { ReactNode } from 'react';
 import { makeStyles, createStyles } from '@material-ui/styles';
-import Auth from 'src/components/Auth';
-import GlobalProgress from 'src/components/GlobalProgress';
+import Auth from 'components/Auth';
+import GlobalProgress from 'components/Progress/GlobalProgress';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -14,6 +14,8 @@ const useStyles = makeStyles(() =>
     content: {
       flexGrow: 1,
       overflowY: 'auto',
+      display: 'flex',
+      flexDirection: 'column',
     },
   }),
 );

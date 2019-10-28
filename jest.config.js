@@ -13,6 +13,9 @@ module.exports = {
     // can see this setting in tsconfig.jest.json -> "jsx": "react"
     'ts-jest': {
       tsConfig: 'tsconfig.jest.json',
+      diagnostics: {
+        ignoreCodes: [2686],
+      },
     },
   },
 };

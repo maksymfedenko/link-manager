@@ -2,7 +2,7 @@ import { makeStyles, createStyles } from '@material-ui/styles';
 import { Theme } from '@material-ui/core';
 import { useContext } from 'react';
 import { AuthContext } from 'src/contexts/AuthContext';
-import Progress from './Progress';
+import Progress from 'components/Progress/Progress';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
