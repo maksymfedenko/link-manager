@@ -51,7 +51,8 @@
     "lodash": "^4.17.15",
     "next": "^9.1.1",
     "react": "^16.10.2",
-    "react-dom": "^16.10.2"
+    "react-dom": "^16.10.2",
+    "react-waypoint": "^9.0.2"
   },
   "devDependencies": {
     "@next/bundle-analyzer": "^9.1.1",

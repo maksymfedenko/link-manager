@@ -1,4 +1,4 @@
-import { Tag } from './Tag.model';
+import { Tag } from '../Tag.model';
 import { BookmarkComment } from './BookmarkComment.model';
 
 export interface Bookmark {

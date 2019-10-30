@@ -1,4 +1,3 @@
-import { Bookmark } from 'src/models/Bookmark.model';
 import {
   Paper,
   Typography,
@@ -8,10 +7,12 @@ import {
   Icon,
   Link,
   Box,
+  Fade,
 } from '@material-ui/core';
 import { useCallback } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { isEmpty } from 'lodash';
+import { Bookmark } from 'src/models/Bookmark/Bookmark.model';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -36,29 +37,31 @@ const BookmarkCard: React.FC<Props> = ({ bookmark, onCardClick }) => {
   }, [onCardClick, bookmark]);
 
   return (
-    <Paper className={classes.card} onClick={onClick}>
-      <Typography component="p" classes={{ root: classes.title }}>
-        {bookmark.title}
-      </Typography>
-      <Box mb={2}>
-        {bookmark.tags.map((tag) => (
-          <Chip
-            size="small"
-            key={tag.title}
-            label={tag.title}
-            color="primary"
-          />
-        ))}
-        {isEmpty(bookmark.tags) && (
-          <Chip size="small" label="Without tag" color="default" />
-        )}
-      </Box>
-      <Box>
-        <Link href={bookmark.link} target="_blank" rel="noreferrer">
-          <Icon className="fas fa-external-link-alt" fontSize="small" />
-        </Link>
-      </Box>
-    </Paper>
+    <Fade in>
+      <Paper className={classes.card} onClick={onClick}>
+        <Typography component="p" classes={{ root: classes.title }}>
+          {bookmark.title}
+        </Typography>
+        <Box mb={2}>
+          {bookmark.tags.map((tag) => (
+            <Chip
+              size="small"
+              key={tag.title}
+              label={tag.title}
+              color="primary"
+            />
+          ))}
+          {isEmpty(bookmark.tags) && (
+            <Chip size="small" label="Without tag" color="default" />
+          )}
+        </Box>
+        <Box>
+          <Link href={bookmark.link} target="_blank" rel="noreferrer">
+            <Icon className="fas fa-external-link-alt" fontSize="small" />
+          </Link>
+        </Box>
+      </Paper>
+    </Fade>
   );
 };
 
