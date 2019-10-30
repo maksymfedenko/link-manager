@@ -1,8 +1,12 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Box, makeStyles, createStyles, Grid } from '@material-ui/core';
-import { Bookmark } from 'src/models/Bookmark.model';
 import Progress from 'components/Progress/Progress';
 import BookmarkCard from 'components/Bookmark/BookmarkCard';
+import useFetchBookmarks from 'src/hooks/useFetchBookmarks';
+import Toastr from 'components/Toastr';
+import { isEmpty } from 'lodash';
+import cn from 'classnames';
+import { Waypoint } from 'react-waypoint';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -12,57 +16,31 @@ const useStyles = makeStyles(() =>
   }),
 );
 
-const BookmarkInfiniteScroll: React.FC<Props> = () => {
+const BookmarkInfiniteScroll: React.FC<Props> = ({ className, order, tag }) => {
   const classes = useStyles();
-  const [bookmarks] = useState<Bookmark[]>([
-    {
-      id: '1',
-      title: 'lololosld',
-      link:
-        'https://github.com/maksymfedenko/grarhql-training/blob/master/frontend/components/LinkList.tsx',
-      tags: [],
-      bookmarkComments: [],
-    },
-    {
-      id: '2',
-      title:
-        'In Material Design, the physical properties of paper are translated to the screen.',
-      link:
-        'https://github.com/maksymfedenko/grarhql-training/blob/master/frontend/components/LinkList.tsx',
-      tags: [],
-      bookmarkComments: [],
-    },
-    {
-      id: '3',
-      title:
-        'Chips are compact elements that represent an input, attribute, or action.',
-      link:
-        'https://github.com/maksymfedenko/grarhql-training/blob/master/frontend/components/LinkList.tsx',
-      tags: [],
-      bookmarkComments: [],
-    },
-    {
-      id: '4',
-      title: 'Your project is running on the limited developer plan',
-      link:
-        'https://github.com/maksymfedenko/grarhql-training/blob/master/frontend/components/LinkList.tsx',
-      tags: [],
-      bookmarkComments: [],
-    },
-  ]);
-  const [loading] = useState(false);
+  const fetchOptions = useMemo(() => ({ order, tag }), [order, tag]);
+  const [
+    { loading, error, data: bookmarkListResponse, isAllLoaded },
+    { fetchNextPage },
+  ] = useFetchBookmarks(fetchOptions);
   const [, setOpenedBookmark] = useState<string>();
 
   return (
-    <Box className={classes.wrapper}>
+    <Box className={cn(classes.wrapper, className)}>
       <Progress open={loading} />
+      <Toastr open={Boolean(error)} error={error} />
       <Grid container spacing={3}>
-        {bookmarks.map((bookmark) => (
-          <Grid item xs={12} sm={4} key={bookmark.id}>
-            <BookmarkCard bookmark={bookmark} onCardClick={setOpenedBookmark} />
-          </Grid>
-        ))}
+        {!isEmpty(bookmarkListResponse) &&
+          bookmarkListResponse!.bookmarks.map((bookmark) => (
+            <Grid item xs={12} sm={4} key={bookmark.id}>
+              <BookmarkCard
+                bookmark={bookmark}
+                onCardClick={setOpenedBookmark}
+              />
+            </Grid>
+          ))}
       </Grid>
+      {!isAllLoaded && !loading && <Waypoint onEnter={fetchNextPage} />}
     </Box>
   );
 };
@@ -70,6 +48,7 @@ const BookmarkInfiniteScroll: React.FC<Props> = () => {
 type Props = {
   tag?: string | null | undefined;
   order?: string;
+  className?: string;
 };
 
 export default BookmarkInfiniteScroll;

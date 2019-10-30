@@ -4,7 +4,7 @@ import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import { isEmpty, get } from 'lodash';
 import { Typography, Box, makeStyles, createStyles } from '@material-ui/core';
 import TagTreeItem from 'components/TagTree/TagTreeItem';
-import useFetchTags from 'src/hooks/useTagList';
+import useFetchTags from 'src/hooks/useFetchTags';
 import Progress from 'components/Progress/Progress';
 import Toastr from 'components/Toastr';
 import { useMemo } from 'react';

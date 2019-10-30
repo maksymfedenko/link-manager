@@ -41,8 +41,13 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: `${theme.spacing(4)}px ${theme.spacing(2)}px`,
       overflowY: 'auto',
     },
+    bookmarkTable: {
+      flexGrow: 1,
+    },
     content: {
       flexGrow: 1,
+      display: 'flex',
+      flexDirection: 'column',
     },
     settingsWrapper: {
       [theme.breakpoints.up('sm')]: {
@@ -84,8 +89,8 @@ export const HomePage = () => {
         </div>
       )}
 
-      <Box>
-        <Box mb={3} className={classes.content}>
+      <Box className={classes.content}>
+        <Box mb={3}>
           <Grid container>
             <Grid item xs={12} sm={6}>
               <Typography variant="h6">Bookmarks</Typography>
@@ -122,7 +127,11 @@ export const HomePage = () => {
             </Grid>
           </Grid>
         </Box>
-        <BookmarkInfiniteScroll order={orderBy} tag={get(selectedTag, 'id')} />
+        <BookmarkInfiniteScroll
+          className={classes.bookmarkTable}
+          order={orderBy}
+          tag={get(selectedTag, 'id')}
+        />
       </Box>
       <Drawer
         open={tagDrawerOpened}
