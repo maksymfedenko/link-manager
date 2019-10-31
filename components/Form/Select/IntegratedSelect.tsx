@@ -21,6 +21,7 @@ const IntegratedSelect: React.FC<ReactSelectProps> = ({ label, ...props }) => {
         font: 'inherit',
       },
     }),
+    ...(props.styles || {}),
   };
 
   return (
