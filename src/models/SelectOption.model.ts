@@ -3,4 +3,5 @@ export interface SelectOption<T = any> {
   iconClassName?: string;
   icon?: JSX.Element;
   value: T;
+  __isNew__?: boolean; // internal react-select/creatable field
 }
