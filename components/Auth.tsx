@@ -31,7 +31,9 @@ const Auth: React.FC<{ children: ReactNode }> = ({ children }) => {
 
   const signOut = useCallback(() => {
     Cookies.remove('token');
-    authClient!.logout({});
+    authClient!.logout({
+      returnTo: window.location.origin,
+    });
   }, [authClient]);
 
   const signIn = useCallback(() => {
