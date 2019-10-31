@@ -14,9 +14,7 @@ export const TAGS_QUERY = gql`
   ) {
     tags(first: $first, after: $after, orderBy: $orderBy, where: $where) {
       id
-      createdAt
       title
-      userId
     }
   }
 `;

@@ -34,11 +34,15 @@ const useFetchBookmarks = (
   const [
     fetchBookmarks,
     { loading, error, data, fetchMore, refetch },
-  ] = useLazyQuery<BookmarkListResponse>(BOOKMARKS_QUERY);
+  ] = useLazyQuery<BookmarkListResponse>(BOOKMARKS_QUERY, {
+    fetchPolicy: 'network-only',
+  });
   const [isAllLoaded, setAllLoaded] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
 
   const fetchNextPage = useCallback(() => {
-    if (loading || !data) return;
+    if (loading || loadingMore || !data) return;
+    setLoadingMore(true);
 
     fetchMore({
       variables: {
@@ -47,6 +51,7 @@ const useFetchBookmarks = (
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prev;
         if (!fetchMoreResult.bookmarks.length) setAllLoaded(true);
+        setLoadingMore(false);
 
         return {
           ...prev,
@@ -76,14 +81,17 @@ const useFetchBookmarks = (
     setAllLoaded(false);
     fetchBookmarks({
       variables: {
-        first: 10,
+        first: 1,
         orderBy: props.order,
         where,
       },
     });
   }, [user, props]);
 
-  return [{ loading, error, data, isAllLoaded }, { fetchNextPage, reload }];
+  return [
+    { loading, error, data, isAllLoaded, loadingMore },
+    { fetchNextPage, reload },
+  ];
 };
 
 type Props = {

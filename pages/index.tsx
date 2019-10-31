@@ -22,6 +22,7 @@ import BookmarkOrderSelect, {
   orderOptions,
 } from 'components/Bookmark/BookmarkOrderSelect';
 import { TagOption } from 'src/models/TagOption.model';
+import NewBookmarkDialog from 'components/Bookmark/NewBookmarkDialog';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -71,7 +72,11 @@ export const HomePage = () => {
   const matches = useMediaQuery(theme.breakpoints.up('lg'));
   const [selectedTag, setSelectedTag] = useState<TagOption>();
   const [tagDrawerOpened, setTagDrawerOpened] = useState<boolean>(false);
+  const [newBookmarkDialogOpened, setNewBookmarkDialogOpened] = useState<
+    boolean
+  >(false);
   const [orderBy, setOrder] = useState<string>(orderOptions[0].value);
+  const [isBookmarksOutdated, setIsBookmarksOutdated] = useState(false);
 
   const openTagDrawer = useCallback(() => {
     setTagDrawerOpened(true);
@@ -80,6 +85,22 @@ export const HomePage = () => {
   const closeTagDrawer = useCallback(() => {
     setTagDrawerOpened(false);
   }, [setTagDrawerOpened]);
+
+  const openNewBookmarkDialog = useCallback(() => {
+    setNewBookmarkDialogOpened(true);
+  }, [setNewBookmarkDialogOpened]);
+
+  const closeNewBookmarkDialog = useCallback(() => {
+    setNewBookmarkDialogOpened(false);
+  }, [setNewBookmarkDialogOpened]);
+
+  const handleCreateBookmark = useCallback(() => {
+    setIsBookmarksOutdated(true);
+  }, [setIsBookmarksOutdated]);
+
+  const handleBookmarksUpdated = useCallback(() => {
+    setIsBookmarksOutdated(false);
+  }, [setIsBookmarksOutdated]);
 
   return (
     <Container maxWidth={false} className={classes.root}>
@@ -120,6 +141,7 @@ export const HomePage = () => {
                   variant="contained"
                   color="primary"
                   className={classes.addBtn}
+                  onClick={openNewBookmarkDialog}
                 >
                   Add New
                 </Button>
@@ -131,6 +153,8 @@ export const HomePage = () => {
           className={classes.bookmarkTable}
           order={orderBy}
           tag={get(selectedTag, 'id')}
+          isBookmarksOutdated={isBookmarksOutdated}
+          onBookmarksRefetch={handleBookmarksUpdated}
         />
       </Box>
       <Drawer
@@ -140,6 +164,11 @@ export const HomePage = () => {
       >
         <TagTree onTagSelect={setSelectedTag} selectedTag={selectedTag} />
       </Drawer>
+      <NewBookmarkDialog
+        open={newBookmarkDialogOpened}
+        onClose={closeNewBookmarkDialog}
+        onSubmit={handleCreateBookmark}
+      />
     </Container>
   );
 };

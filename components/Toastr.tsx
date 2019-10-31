@@ -1,6 +1,6 @@
 import { Snackbar } from '@material-ui/core';
 import { ApolloError } from 'apollo-client';
-import { useMemo } from 'react';
+import { useMemo, ReactNode } from 'react';
 import { SnackbarOrigin } from '@material-ui/core/Snackbar';
 
 const anchorOrigin: SnackbarOrigin = {
@@ -16,7 +16,7 @@ const parseError = (error: ToastrError): React.ReactNode => {
   return error;
 };
 
-const Toastr: React.FC<Props> = ({ open, error }) => {
+const Toastr: React.FC<Props> = ({ open, error, action }) => {
   const parsedError = useMemo(() => parseError(error), [error]);
 
   return (
@@ -25,6 +25,7 @@ const Toastr: React.FC<Props> = ({ open, error }) => {
       open={open}
       autoHideDuration={3000}
       message={parsedError}
+      action={action}
     />
   );
 };
@@ -34,6 +35,7 @@ type ToastrError = ApolloError | JSX.Element | string | undefined;
 type Props = {
   open: boolean;
   error: ToastrError;
+  action?: ReactNode;
 };
 
 export default Toastr;
