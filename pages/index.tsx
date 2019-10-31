@@ -23,6 +23,7 @@ import BookmarkOrderSelect, {
 } from 'components/Bookmark/BookmarkOrderSelect';
 import { TagOption } from 'src/models/TagOption.model';
 import NewBookmarkDialog from 'components/Bookmark/NewBookmarkDialog';
+import OnlyAuthGuard from 'components/OnlyAuthGuard';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -103,73 +104,75 @@ export const HomePage = () => {
   }, [setIsBookmarksOutdated]);
 
   return (
-    <Container maxWidth={false} className={classes.root}>
-      {matches && (
-        <div className={classes.tagTreeWrapper}>
-          <TagTree onTagSelect={setSelectedTag} selectedTag={selectedTag} />
-        </div>
-      )}
+    <OnlyAuthGuard>
+      <Container maxWidth={false} className={classes.root}>
+        {matches && (
+          <div className={classes.tagTreeWrapper}>
+            <TagTree onTagSelect={setSelectedTag} selectedTag={selectedTag} />
+          </div>
+        )}
 
-      <Box className={classes.content}>
-        <Box mb={3}>
-          <Grid container>
-            <Grid item xs={12} sm={6}>
-              <Typography variant="h6">Bookmarks</Typography>
-            </Grid>
-            <Grid
-              item
-              xs={12}
-              sm={6}
-              classes={{ item: classes.settingsWrapper }}
-            >
-              <Box className={classes.settingsBox}>
-                {!matches && (
-                  <IconButton
-                    aria-label="filter of bookmarks by tag"
-                    aria-haspopup="true"
-                    onClick={openTagDrawer}
+        <Box className={classes.content}>
+          <Box mb={3}>
+            <Grid container>
+              <Grid item xs={12} sm={6}>
+                <Typography variant="h6">Bookmarks</Typography>
+              </Grid>
+              <Grid
+                item
+                xs={12}
+                sm={6}
+                classes={{ item: classes.settingsWrapper }}
+              >
+                <Box className={classes.settingsBox}>
+                  {!matches && (
+                    <IconButton
+                      aria-label="filter of bookmarks by tag"
+                      aria-haspopup="true"
+                      onClick={openTagDrawer}
+                      color="primary"
+                    >
+                      <Icon className="fas fa-filter" />
+                    </IconButton>
+                  )}
+                  <BookmarkOrderSelect
+                    currentOrder={orderBy}
+                    changeOrder={setOrder}
+                  />
+                  <Button
+                    variant="contained"
                     color="primary"
+                    className={classes.addBtn}
+                    onClick={openNewBookmarkDialog}
                   >
-                    <Icon className="fas fa-filter" />
-                  </IconButton>
-                )}
-                <BookmarkOrderSelect
-                  currentOrder={orderBy}
-                  changeOrder={setOrder}
-                />
-                <Button
-                  variant="contained"
-                  color="primary"
-                  className={classes.addBtn}
-                  onClick={openNewBookmarkDialog}
-                >
-                  Add New
-                </Button>
-              </Box>
+                    Add New
+                  </Button>
+                </Box>
+              </Grid>
             </Grid>
-          </Grid>
+          </Box>
+          <BookmarkInfiniteScroll
+            className={classes.bookmarkTable}
+            order={orderBy}
+            tag={get(selectedTag, 'id')}
+            isBookmarksOutdated={isBookmarksOutdated}
+            onBookmarksRefetch={handleBookmarksUpdated}
+          />
         </Box>
-        <BookmarkInfiniteScroll
-          className={classes.bookmarkTable}
-          order={orderBy}
-          tag={get(selectedTag, 'id')}
-          isBookmarksOutdated={isBookmarksOutdated}
-          onBookmarksRefetch={handleBookmarksUpdated}
+        <Drawer
+          open={tagDrawerOpened}
+          onClose={closeTagDrawer}
+          classes={{ paper: classes.tagTreeDrawer }}
+        >
+          <TagTree onTagSelect={setSelectedTag} selectedTag={selectedTag} />
+        </Drawer>
+        <NewBookmarkDialog
+          open={newBookmarkDialogOpened}
+          onClose={closeNewBookmarkDialog}
+          onSubmit={handleCreateBookmark}
         />
-      </Box>
-      <Drawer
-        open={tagDrawerOpened}
-        onClose={closeTagDrawer}
-        classes={{ paper: classes.tagTreeDrawer }}
-      >
-        <TagTree onTagSelect={setSelectedTag} selectedTag={selectedTag} />
-      </Drawer>
-      <NewBookmarkDialog
-        open={newBookmarkDialogOpened}
-        onClose={closeNewBookmarkDialog}
-        onSubmit={handleCreateBookmark}
-      />
-    </Container>
+      </Container>
+    </OnlyAuthGuard>
   );
 };
 

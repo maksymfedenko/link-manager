@@ -81,7 +81,7 @@ const useFetchBookmarks = (
     setAllLoaded(false);
     fetchBookmarks({
       variables: {
-        first: 1,
+        first: 10,
         orderBy: props.order,
         where,
       },
