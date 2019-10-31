@@ -4,6 +4,13 @@ import { SelectOption } from 'src/models/SelectOption.model';
 import { FieldInputProps } from 'formik';
 import IntegratedSelect from './Select/IntegratedSelect';
 
+const selectStyles = {
+  menuList: () => ({
+    maxHeight: '112px',
+    overflow: 'auto',
+  }),
+};
+
 const TagSelect: React.FC<FieldInputProps<any>> = (props) => {
   const [{ loading, data }] = useFetchTags();
   const tagsOptions: SelectOption<string>[] = useMemo(() => {
@@ -21,6 +28,7 @@ const TagSelect: React.FC<FieldInputProps<any>> = (props) => {
       isLoading={loading}
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...props}
+      styles={selectStyles}
       label="Tags"
       options={tagsOptions}
       placeholder="Select tags"
