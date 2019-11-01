@@ -11,10 +11,9 @@ import {
   ListItemIcon,
   ListItemText,
   Button,
+  Avatar,
 } from '@material-ui/core';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import SettingsIcon from '@material-ui/icons/Settings';
 import { useState, useCallback, useContext } from 'react';
 import { AuthContext } from 'src/contexts/AuthContext';
 import { ChangeThemeContext } from 'src/contexts/ChangeThemeContext';
@@ -64,19 +63,13 @@ const Header = () => {
         onClick={openUserMenu}
         color="inherit"
       >
-        <AccountCircleIcon />
+        <Avatar src={user!.picture} />
       </IconButton>
       <Menu
         anchorEl={userMenuAnchor}
         open={Boolean(userMenuAnchor)}
         onClose={closeUserMenu}
       >
-        <MenuItem onClick={closeUserMenu}>
-          <ListItemIcon>
-            <SettingsIcon fontSize="small" />
-          </ListItemIcon>
-          <ListItemText primary="Settings" />
-        </MenuItem>
         <MenuItem onClick={onSignOut}>
           <ListItemIcon>
             <ExitToAppIcon fontSize="small" />
