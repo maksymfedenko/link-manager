@@ -1,7 +1,7 @@
 import React from 'react';
 import Document, { Head, Main, NextScript } from 'next/document';
 import { ServerStyleSheets } from '@material-ui/styles';
-import theme from 'src/theme';
+import themes from 'src/themes';
 
 class MyDocument extends Document {
   render() {
@@ -14,7 +14,10 @@ class MyDocument extends Document {
             content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no"
           />
           {/* PWA primary color */}
-          <meta name="theme-color" content={theme.palette.primary.main} />
+          <meta
+            name="theme-color"
+            content={themes.light.palette.primary.main}
+          />
           <link rel="shortcut icon" href="favicon.png" />
           <link
             rel="stylesheet"

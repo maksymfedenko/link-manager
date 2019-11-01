@@ -17,11 +17,16 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import SettingsIcon from '@material-ui/icons/Settings';
 import { useState, useCallback, useContext } from 'react';
 import { AuthContext } from 'src/contexts/AuthContext';
+import { ChangeThemeContext } from 'src/contexts/ChangeThemeContext';
+import InvertColorsIcon from '@material-ui/icons/InvertColors';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     rightContent: {
       marginLeft: 'auto',
+    },
+    themeButton: {
+      marginRight: theme.spacing(1),
     },
     link: {
       margin: theme.spacing(1),
@@ -35,6 +40,7 @@ const Header = () => {
     null,
   );
   const { user, signOut, signIn } = useContext(AuthContext);
+  const { toggleTheme } = useContext(ChangeThemeContext);
 
   const openUserMenu = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
     setUserMenuAnchor(e.currentTarget);
@@ -87,6 +93,13 @@ const Header = () => {
         <Typography variant="h6">Link Manager</Typography>
 
         <div className={classes.rightContent}>
+          <IconButton
+            onClick={toggleTheme}
+            color="inherit"
+            className={classes.themeButton}
+          >
+            <InvertColorsIcon />
+          </IconButton>
           {user ? (
             renderUserDropdown()
           ) : (
