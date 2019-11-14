@@ -123,12 +123,7 @@ const BookmarkFormDialog: React.FC<Props> = ({
               <Button type="button" onClick={onClose} color="default">
                 Cancel
               </Button>
-              <Button
-                onClick={onClose}
-                color="primary"
-                type="submit"
-                disabled={isSubmitting}
-              >
+              <Button color="primary" type="submit" disabled={isSubmitting}>
                 {action}
               </Button>
             </DialogActions>

@@ -6,5 +6,6 @@ export interface Bookmark {
   title: string;
   link: string;
   tags: Tag[];
+  userId: string;
   bookmarkComments: BookmarkComment[];
 }
