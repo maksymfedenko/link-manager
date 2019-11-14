@@ -6,6 +6,7 @@ import { isNull, last, get } from 'lodash';
 import { BookmarkListResponse } from 'src/models/Bookmark/BookmarkListResponse.model';
 import { FetchListHookState } from 'src/models/FetchListHookState.model';
 import { FetchListHookActions } from 'src/models/FetchListHookActions.model';
+import { Tag } from 'src/models/Tag.model';
 
 export const BOOKMARKS_QUERY = gql`
   query BookmarksQuery(
@@ -68,8 +69,9 @@ const useFetchBookmarks = (
   useEffect(() => {
     if (!user) return;
 
-    const where: any = {
+    const where: BookmarksWhere = {
       userId: user.sub,
+      title_contains: props.search, // eslint-disable-line @typescript-eslint/camelcase
     };
 
     if (props.tag) {
@@ -97,6 +99,14 @@ const useFetchBookmarks = (
 type Props = {
   tag?: string | null | undefined;
   order?: string;
+  search?: string;
+};
+
+type BookmarksWhere = {
+  tags_some?: Pick<Tag, 'id'>;
+  tags_every?: Pick<Tag, 'id'> | { id: null };
+  userId: string;
+  title_contains?: string;
 };
 
 export default useFetchBookmarks;

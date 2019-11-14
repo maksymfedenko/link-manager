@@ -19,7 +19,7 @@ export const TAGS_QUERY = gql`
   }
 `;
 
-const useFetchTags = (): [FetchHookState<TagListResponse>] => {
+const useFetchTags = (props?: Props): [FetchHookState<TagListResponse>] => {
   const { user } = useContext(AuthContext);
   const [fetchTags, { loading, error, data }] = useLazyQuery<TagListResponse>(
     TAGS_QUERY,
@@ -27,17 +27,32 @@ const useFetchTags = (): [FetchHookState<TagListResponse>] => {
 
   useEffect(() => {
     if (user) {
+      const where: TagsWhere = {
+        userId: user.sub,
+      };
+
+      if (props && props.search) {
+        where.title_contains = props.search; // eslint-disable-line @typescript-eslint/camelcase
+      }
+
       fetchTags({
         variables: {
-          where: {
-            userId: user.sub,
-          },
+          where,
         },
       });
     }
   }, [user]);
 
   return [{ loading, error, data }];
+};
+
+type Props = {
+  search?: string;
+};
+
+type TagsWhere = {
+  userId: string;
+  title_contains?: string;
 };
 
 export default useFetchTags;
