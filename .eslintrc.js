@@ -50,5 +50,6 @@ module.exports = {
     '@typescript-eslint/no-use-before-define': 'off',
     '@typescript-eslint/no-non-null-assertion': 'off',
     'react/destructuring-assignment': 'off',
+    'react/jsx-no-duplicate-props': [2, { ignoreCase: false }],
   },
 };

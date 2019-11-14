@@ -12,23 +12,40 @@ import {
   ListItemText,
   Button,
   Avatar,
+  TextField,
 } from '@material-ui/core';
+import ClearIcon from '@material-ui/icons/Clear';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { useState, useCallback, useContext } from 'react';
 import { AuthContext } from 'src/contexts/AuthContext';
 import { ChangeThemeContext } from 'src/contexts/ChangeThemeContext';
 import InvertColorsIcon from '@material-ui/icons/InvertColors';
+import { debounce } from 'lodash';
+import IndigoPalette from '@material-ui/core/colors/indigo';
+import GlobalSearch from './GlobalSearch';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     rightContent: {
       marginLeft: 'auto',
     },
+    search: {
+      marginLeft: theme.spacing(3),
+      padding: `${theme.spacing(0.5)}px ${theme.spacing(1)}px`,
+      borderRadius: theme.shape.borderRadius,
+      backgroundColor: IndigoPalette[400],
+    },
+    searchFormControl: {
+      color: theme.palette.common.white,
+    },
     themeButton: {
       marginRight: theme.spacing(1),
     },
     link: {
       margin: theme.spacing(1),
+    },
+    clearIcon: {
+      color: theme.palette.common.white,
     },
   }),
 );
@@ -38,6 +55,8 @@ const Header = () => {
   const [userMenuAnchor, setUserMenuAnchor] = useState<null | HTMLElement>(
     null,
   );
+  const [search, setSearch] = useState<string>('');
+  const [globalSearch, setGlobalSearch] = useState<string>('');
   const { user, signOut, signIn } = useContext(AuthContext);
   const { toggleTheme } = useContext(ChangeThemeContext);
 
@@ -80,29 +99,69 @@ const Header = () => {
     </>
   );
 
-  return (
-    <AppBar position="static">
-      <Toolbar>
-        <Typography variant="h6">Link Manager</Typography>
+  const debouncedSetGlobalSearch = useCallback(
+    debounce<(value: string) => void>((newSearch) => {
+      setGlobalSearch(newSearch);
+    }, 500),
+    [setGlobalSearch],
+  );
 
-        <div className={classes.rightContent}>
-          <IconButton
-            onClick={toggleTheme}
-            color="inherit"
-            className={classes.themeButton}
-          >
-            <InvertColorsIcon />
-          </IconButton>
-          {user ? (
-            renderUserDropdown()
-          ) : (
-            <Button variant="contained" color="secondary" onClick={signIn}>
-              LOGIN
-            </Button>
+  const onSearch = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { value } = e.target;
+      setSearch(value);
+      debouncedSetGlobalSearch(value);
+    },
+    [debouncedSetGlobalSearch],
+  );
+
+  const clearSearch = useCallback(() => {
+    setSearch('');
+    setGlobalSearch('');
+  }, [setSearch, setGlobalSearch]);
+
+  return (
+    <>
+      <AppBar position="static">
+        <Toolbar>
+          <Typography variant="h6">Link Manager</Typography>
+          {user && (
+            <TextField
+              inputProps={{ onChange: onSearch }}
+              value={search}
+              placeholder="Search"
+              classes={{ root: classes.search }}
+              InputProps={{
+                classes: { formControl: classes.searchFormControl },
+                disableUnderline: true,
+                endAdornment: Boolean(search) && (
+                  <IconButton className={classes.clearIcon}>
+                    <ClearIcon onMouseUp={clearSearch} fontSize="small" />
+                  </IconButton>
+                ),
+              }}
+            />
           )}
-        </div>
-      </Toolbar>
-    </AppBar>
+          <div className={classes.rightContent}>
+            <IconButton
+              onClick={toggleTheme}
+              color="inherit"
+              className={classes.themeButton}
+            >
+              <InvertColorsIcon />
+            </IconButton>
+            {user ? (
+              renderUserDropdown()
+            ) : (
+              <Button variant="contained" color="secondary" onClick={signIn}>
+                LOGIN
+              </Button>
+            )}
+          </div>
+        </Toolbar>
+      </AppBar>
+      {user && <GlobalSearch search={globalSearch} />}
+    </>
   );
 };
 
