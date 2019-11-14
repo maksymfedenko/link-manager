@@ -77,7 +77,9 @@ export const HomePage = () => {
     boolean
   >(false);
   const [orderBy, setOrder] = useState<string>(orderOptions[0].value);
-  const [isBookmarksOutdated, setIsBookmarksOutdated] = useState(false);
+  const [isBookmarksOutdated, setIsBookmarksOutdated] = useState<boolean>(
+    false,
+  );
 
   const openTagDrawer = useCallback(() => {
     setTagDrawerOpened(true);
@@ -97,6 +99,7 @@ export const HomePage = () => {
 
   const handleCreateBookmark = useCallback(() => {
     setIsBookmarksOutdated(true);
+    closeNewBookmarkDialog();
   }, [setIsBookmarksOutdated]);
 
   const handleBookmarksUpdated = useCallback(() => {

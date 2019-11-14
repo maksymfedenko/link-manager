@@ -83,6 +83,12 @@ const BookmarkInfiniteScroll: React.FC<Props> = ({
     reload();
     if (onBookmarksRefetch) onBookmarksRefetch();
   }, [reload]);
+
+  const handleBookmarkUpdate = useCallback(() => {
+    setEditedBookmark(undefined);
+    reloadBookmarks();
+  }, [setEditedBookmark, reloadBookmarks]);
+
   const isBookmarksFound =
     bookmarkListResponse && !isEmpty(bookmarkListResponse.bookmarks);
 
@@ -109,7 +115,7 @@ const BookmarkInfiniteScroll: React.FC<Props> = ({
       <EditBookmarkDialog
         open={Boolean(editedBookmark)}
         onClose={() => setEditedBookmark(undefined)}
-        onSubmit={() => {}}
+        onSubmit={handleBookmarkUpdate}
         bookmark={editedBookmark}
       />
     </Box>
