@@ -3,3 +3,7 @@ export interface Tag {
   title: string;
   tags?: Tag[];
 }
+
+export interface TagShow extends Tag {
+  userId: string;
+}

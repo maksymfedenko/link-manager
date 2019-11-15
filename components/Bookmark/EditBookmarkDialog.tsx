@@ -6,6 +6,7 @@ import { Tag } from 'src/models/Tag.model';
 import gql from 'graphql-tag';
 import { useMutation } from '@apollo/react-hooks';
 import addNewBookmarkTags from 'src/utils/addNewBookmarkTagsToStore';
+import tagsToSelectOptions from 'src/utils/tagToSelectOption';
 import BookmarkFormDialog from './BookmarkFormDialog';
 
 const PATCH_BOOKMARK = gql`
@@ -58,10 +59,7 @@ const EditBookmarkDialog: React.FC<Props> = ({
     return {
       link: bookmark.link,
       title: bookmark.title,
-      tags: get(bookmark, 'tags', [] as Tag[]).map((tag) => ({
-        label: tag.title,
-        value: tag.id,
-      })),
+      tags: tagsToSelectOptions(get(bookmark, 'tags', [] as Tag[])),
     };
   }, [bookmark]);
 

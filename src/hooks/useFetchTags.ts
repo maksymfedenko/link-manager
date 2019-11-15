@@ -41,7 +41,7 @@ const useFetchTags = (props?: Props): [FetchHookState<TagListResponse>] => {
         },
       });
     }
-  }, [user]);
+  }, [user, props]);
 
   return [{ loading, error, data }];
 };
