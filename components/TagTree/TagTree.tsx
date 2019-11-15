@@ -35,24 +35,22 @@ const renderTags = (tags: TagOption[] | undefined, props: Props) => {
   ));
 };
 
+const defaultTagOptions: TagOption[] = [
+  {
+    id: undefined,
+    title: 'All',
+  },
+  {
+    id: null,
+    title: 'Without tags',
+  },
+];
+
 const TagTree: React.FC<Props> = (props) => {
   const classes = useStyles();
   const [{ loading, error, data: tagListResponse }] = useFetchTags();
   const tags = useMemo(() => {
-    const defaultTagOptions: TagOption[] = [
-      {
-        id: undefined,
-        title: 'All',
-      },
-      {
-        id: null,
-        title: 'Without tags',
-      },
-    ];
-
-    return isEmpty(tagListResponse)
-      ? defaultTagOptions
-      : defaultTagOptions.concat(tagListResponse!.tags);
+    return defaultTagOptions.concat(get(tagListResponse, 'tags', []));
   }, [tagListResponse]);
 
   return (

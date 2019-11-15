@@ -14,7 +14,6 @@ import { useCallback } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { isEmpty } from 'lodash';
 import { Bookmark } from 'src/models/Bookmark/Bookmark.model';
-import VisibilityIcon from '@material-ui/icons/Visibility';
 import EditIcon from '@material-ui/icons/Edit';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -36,15 +35,8 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-const BookmarkCard: React.FC<Props> = ({
-  bookmark,
-  onViewClick,
-  onEditClick,
-}) => {
+const BookmarkCard: React.FC<Props> = ({ bookmark, onEditClick }) => {
   const classes = useStyles();
-  const handleViewClick = useCallback(() => {
-    if (onViewClick) onViewClick(bookmark);
-  }, [onViewClick, bookmark]);
 
   const handleEditClick = useCallback(() => {
     if (onEditClick) onEditClick(bookmark);
@@ -81,9 +73,6 @@ const BookmarkCard: React.FC<Props> = ({
               <Icon className="fas fa-external-link-alt" fontSize="small" />
             </IconButton>
           </Link>
-          <IconButton onClick={handleViewClick}>
-            <VisibilityIcon fontSize="small" />
-          </IconButton>
           <IconButton onClick={handleEditClick}>
             <EditIcon fontSize="small" />
           </IconButton>

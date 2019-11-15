@@ -36,7 +36,6 @@ const BookmarkInfiniteScroll: React.FC<Props> = ({
   mini,
 }) => {
   const classes = useStyles();
-  const [, setViewedBookmark] = useState<Bookmark>();
   const [editedBookmark, setEditedBookmark] = useState<Bookmark>();
   const fetchOptions = useMemo(() => ({ order, tag, search }), [
     order,
@@ -68,7 +67,6 @@ const BookmarkInfiniteScroll: React.FC<Props> = ({
             <Grid item xs={12} sm={4} key={bookmark.id}>
               <BookmarkCard
                 bookmark={bookmark}
-                onViewClick={setViewedBookmark}
                 onEditClick={setEditedBookmark}
               />
             </Grid>
@@ -76,7 +74,7 @@ const BookmarkInfiniteScroll: React.FC<Props> = ({
         </Grid>
       );
     },
-    [mini, bookmarkListResponse, setViewedBookmark, setEditedBookmark],
+    [mini, bookmarkListResponse, setEditedBookmark],
   );
 
   const reloadBookmarks = useCallback(() => {

@@ -24,6 +24,7 @@ import BookmarkOrderSelect, {
 import { TagOption } from 'src/models/TagOption.model';
 import NewBookmarkDialog from 'components/Bookmark/NewBookmarkDialog';
 import OnlyAuthGuard from 'components/OnlyAuthGuard';
+import useBooleanState from 'src/hooks/useBooleanState';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -72,39 +73,27 @@ export const HomePage = () => {
   const classes = useStyles();
   const matches = useMediaQuery(theme.breakpoints.up('lg'));
   const [selectedTag, setSelectedTag] = useState<TagOption>();
-  const [tagDrawerOpened, setTagDrawerOpened] = useState<boolean>(false);
-  const [newBookmarkDialogOpened, setNewBookmarkDialogOpened] = useState<
-    boolean
-  >(false);
+  const [isTagDrawerOpen, openTagDrawer, closeTagDrawer] = useBooleanState();
+  const [
+    isNewBookmarkDialogOpen,
+    openNewBookmarkDialog,
+    closeNewBookmarkDialog,
+  ] = useBooleanState();
+  const [
+    isBookmarksOutdated,
+    markBookmarksOutdated,
+    markBookmarksUpToDate,
+  ] = useBooleanState();
   const [orderBy, setOrder] = useState<string>(orderOptions[0].value);
-  const [isBookmarksOutdated, setIsBookmarksOutdated] = useState<boolean>(
-    false,
-  );
-
-  const openTagDrawer = useCallback(() => {
-    setTagDrawerOpened(true);
-  }, [setTagDrawerOpened]);
-
-  const closeTagDrawer = useCallback(() => {
-    setTagDrawerOpened(false);
-  }, [setTagDrawerOpened]);
-
-  const openNewBookmarkDialog = useCallback(() => {
-    setNewBookmarkDialogOpened(true);
-  }, [setNewBookmarkDialogOpened]);
-
-  const closeNewBookmarkDialog = useCallback(() => {
-    setNewBookmarkDialogOpened(false);
-  }, [setNewBookmarkDialogOpened]);
 
   const handleCreateBookmark = useCallback(() => {
-    setIsBookmarksOutdated(true);
+    markBookmarksOutdated();
     closeNewBookmarkDialog();
-  }, [setIsBookmarksOutdated]);
+  }, [markBookmarksOutdated]);
 
   const handleBookmarksUpdated = useCallback(() => {
-    setIsBookmarksOutdated(false);
-  }, [setIsBookmarksOutdated]);
+    markBookmarksUpToDate();
+  }, [markBookmarksUpToDate]);
 
   return (
     <OnlyAuthGuard>
@@ -163,14 +152,14 @@ export const HomePage = () => {
           />
         </Box>
         <Drawer
-          open={tagDrawerOpened}
+          open={isTagDrawerOpen}
           onClose={closeTagDrawer}
           classes={{ paper: classes.tagTreeDrawer }}
         >
           <TagTree onTagSelect={setSelectedTag} selectedTag={selectedTag} />
         </Drawer>
         <NewBookmarkDialog
-          open={newBookmarkDialogOpened}
+          open={isNewBookmarkDialogOpen}
           onClose={closeNewBookmarkDialog}
           onSubmit={handleCreateBookmark}
         />
