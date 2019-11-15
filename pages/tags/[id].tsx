@@ -23,6 +23,7 @@ import useFetchTag from 'src/hooks/useFetchTag';
 import { get } from 'lodash';
 import AccessGuard from 'components/AccessGuard';
 import { useRouter } from 'next/router';
+import useBooleanState from 'src/hooks/useBooleanState';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -47,31 +48,27 @@ export const TagPage = () => {
   const router = useRouter();
   const tagId = router.query.id as string;
   const classes = useStyles();
-  const [newBookmarkDialogOpened, setNewBookmarkDialogOpened] = useState<
-    boolean
-  >(false);
-  const [isBookmarksOutdated, setIsBookmarksOutdated] = useState<boolean>(
-    false,
-  );
+  const [
+    isNewBookmarkDialogOpen,
+    openNewBookmarkDialog,
+    closeNewBookmarkDialog,
+  ] = useBooleanState();
+  const [
+    isBookmarksOutdated,
+    markBookmarksOutdated,
+    markBookmarksUpToDate,
+  ] = useBooleanState();
   const [orderBy, setOrder] = useState<string>(orderOptions[0].value);
   const [{ isAccessDenied, data: tagResponse }] = useFetchTag(tagId);
 
-  const openNewBookmarkDialog = useCallback(() => {
-    setNewBookmarkDialogOpened(true);
-  }, [setNewBookmarkDialogOpened]);
-
-  const closeNewBookmarkDialog = useCallback(() => {
-    setNewBookmarkDialogOpened(false);
-  }, [setNewBookmarkDialogOpened]);
-
   const handleCreateBookmark = useCallback(() => {
-    setIsBookmarksOutdated(true);
+    markBookmarksOutdated();
     closeNewBookmarkDialog();
-  }, [setIsBookmarksOutdated]);
+  }, [markBookmarksOutdated]);
 
   const handleBookmarksUpdated = useCallback(() => {
-    setIsBookmarksOutdated(false);
-  }, [setIsBookmarksOutdated]);
+    markBookmarksUpToDate();
+  }, [markBookmarksUpToDate]);
 
   const newBookmarkIDefaultValues = useMemo(() => {
     if (!tagResponse || !tagResponse.tag) return;
@@ -124,7 +121,7 @@ export const TagPage = () => {
           />
           <NewBookmarkDialog
             defaultValues={newBookmarkIDefaultValues}
-            open={newBookmarkDialogOpened}
+            open={isNewBookmarkDialogOpen}
             onClose={closeNewBookmarkDialog}
             onSubmit={handleCreateBookmark}
           />
