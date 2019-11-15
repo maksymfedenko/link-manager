@@ -13,6 +13,7 @@ import {
   Button,
   Avatar,
   TextField,
+  Link,
 } from '@material-ui/core';
 import ClearIcon from '@material-ui/icons/Clear';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
@@ -22,6 +23,7 @@ import { ChangeThemeContext } from 'src/contexts/ChangeThemeContext';
 import InvertColorsIcon from '@material-ui/icons/InvertColors';
 import { debounce } from 'lodash';
 import IndigoPalette from '@material-ui/core/colors/indigo';
+import LinkNext from 'next/link';
 import GlobalSearch from './GlobalSearch';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -124,7 +126,11 @@ const Header = () => {
     <>
       <AppBar position="static">
         <Toolbar>
-          <Typography variant="h6">Link Manager</Typography>
+          <LinkNext href="/">
+            <Link color="inherit" underline="none">
+              <Typography variant="h6">Link Manager</Typography>
+            </Link>
+          </LinkNext>
           {user && (
             <TextField
               inputProps={{ onChange: onSearch }}
@@ -135,7 +141,7 @@ const Header = () => {
                 classes: { formControl: classes.searchFormControl },
                 disableUnderline: true,
                 endAdornment: Boolean(search) && (
-                  <IconButton className={classes.clearIcon}>
+                  <IconButton className={classes.clearIcon} size="small">
                     <ClearIcon onMouseUp={clearSearch} fontSize="small" />
                   </IconButton>
                 ),

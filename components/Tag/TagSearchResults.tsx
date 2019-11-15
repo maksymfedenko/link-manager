@@ -2,8 +2,9 @@ import { createStyles, Box, Chip, Theme, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import useFetchTags from 'src/hooks/useFetchTags';
 import Progress from 'components/Progress/Progress';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { isEmpty } from 'lodash';
+import LinkNext from 'next/link';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -16,20 +17,23 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-const TagSearchResults: React.FC<Props> = ({ search }) => {
+const TagSearchResults: React.FC<Props> = ({ search, onTagClick }) => {
   const classes = useStyles();
-  const [{ loading, data: tagListResponse }] = useFetchTags({ search });
+  const tagsOptions = useMemo(() => ({ search }), [search]);
+  const [{ loading, data: tagListResponse }] = useFetchTags(tagsOptions);
 
   const renderTags = useCallback(
     () =>
       tagListResponse!.tags.map((tag) => (
-        <Chip
-          className={classes.chip}
-          size="small"
-          key={tag.title}
-          label={tag.title}
-          color="primary"
-        />
+        <LinkNext key={tag.title} href="/tags/[id]" as={`/tags/${tag.id}`}>
+          <Chip
+            className={classes.chip}
+            onClick={onTagClick}
+            size="small"
+            label={tag.title}
+            color="primary"
+          />
+        </LinkNext>
       )),
     [tagListResponse],
   );
@@ -48,6 +52,7 @@ const TagSearchResults: React.FC<Props> = ({ search }) => {
 
 type Props = {
   search: string;
+  onTagClick?: () => void;
 };
 
 export default TagSearchResults;

@@ -24,6 +24,7 @@ class MyDocument extends Document {
             href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
           />
           <link rel="stylesheet" href="/fontawesome/css/all.min.css" />
+          <link rel="stylesheet" href="/global.css" />
         </Head>
         <body>
           <Main />

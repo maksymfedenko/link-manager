@@ -48,22 +48,22 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const GlobalSearch: React.FC<Props> = ({ search }) => {
   const classes = useStyles();
-  const [tagDrawerOpened, setTagDrawerOpened] = useState<boolean>(false);
+  const [isOpened, setIsOpened] = useState<boolean>(false);
   const [searchBy, setSearchBy] = useState<SearchBy>(SearchBy.bookmark);
 
   useEffect(() => {
-    setTagDrawerOpened(Boolean(search));
+    setIsOpened(Boolean(search));
   }, [search]);
 
-  const closeTagDrawer = useCallback(() => {
-    setTagDrawerOpened(false);
-  }, [setTagDrawerOpened]);
+  const close = useCallback(() => {
+    setIsOpened(false);
+  }, [setIsOpened]);
 
   return (
     <Drawer
       anchor="top"
-      open={tagDrawerOpened}
-      onClose={closeTagDrawer}
+      open={isOpened}
+      onClose={close}
       ModalProps={{
         disableEnforceFocus: true,
         disableAutoFocus: true,
@@ -93,7 +93,7 @@ const GlobalSearch: React.FC<Props> = ({ search }) => {
             </RadioGroup>
           </Grid>
           <Grid item>
-            <IconButton onClick={closeTagDrawer}>
+            <IconButton onClick={close}>
               <ClearIcon />
             </IconButton>
           </Grid>
@@ -103,7 +103,9 @@ const GlobalSearch: React.FC<Props> = ({ search }) => {
             {searchBy === SearchBy.bookmark && (
               <BookmarkInfiniteScroll search={search} mini />
             )}
-            {searchBy === SearchBy.tag && <TagSearchResults search={search} />}
+            {searchBy === SearchBy.tag && (
+              <TagSearchResults search={search} onTagClick={close} />
+            )}
           </Box>
         )}
       </Box>
